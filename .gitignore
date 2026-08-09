@@ -47,7 +47,8 @@ access.log
 /cache/
 public/css/user.css
 public/error/
-/plugins/
+/plugins/*
+!/plugins/dlg-workbench/
 /data
 /default/scaffold
 public/scripts/extensions/third-party
