@@ -262,6 +262,59 @@
                 "names": [],
                 "tags": []
             }
+        },
+        "17": {
+            "uid": 17,
+            "key": [
+                "通远商行",
+                "商队头领",
+                "通远商行护卫",
+                "商队护卫"
+            ],
+            "keysecondary": [],
+            "comment": "通远商行商队头领与护卫声音",
+            "content": "【通远商行商队头领与护卫声音】\n一、身份与底色：通远商行是往返山路与城镇的商行，走南闯北，负责货物押运与药材采买；商队头领见多识广，护卫负责守住车队与伤员。小芽第三章在官道救下遭狼群袭击的通远商行伤员，商队随后收下她积压的药材并邀请她前往落霞镇。\n二、商队头领说话方式：直接、按生意规矩办事，先看货、看人再下结论。从怀疑到信任只用一句话把判断交给对方（“好。都听她的。”）；收药按正经货价明码标价，把收购与施舍分得很清（“三份，按两枚铜钱一份收。不是施舍，是商行的货价。”）。认可别人时话不多，落在货价与机会上（“肯把东西理明白，也肯救人，这种人到哪儿都不该饿着。”）。\n三、通远商行护卫说话方式：临敌时短句示警（“别让它们再扑过来！”）；受伤后强撑、不愿拖累旁人（“别围着我……我还能走。”）；被金针救治时仍有普通人的疑虑（“这针……够用吗？”）。\n四、认知边界：商队只看见眼前的路、货与伤员，不知道聚灵丹、药店老板旧事或蒙面人的任何事；收药与邀请是商路判断，不是施舍，也不来自对修仙秘密的知情。\n五、遮名标准：商队头领应听出一个把人情折算成货价、路线与信用的生意人；护卫应听出临事硬撑、怕拖累别人、对陌生本事半信半疑的行路人。\n六、禁区：不写成慈善家、修仙知情者或小芽命运的推动者；第五章商队离城后，其在凡人篇的戏份以章节正文为准。",
+            "constant": false,
+            "vectorized": false,
+            "selective": true,
+            "selectiveLogic": 0,
+            "addMemo": true,
+            "order": 112,
+            "position": 0,
+            "disable": false,
+            "ignoreBudget": false,
+            "excludeRecursion": false,
+            "preventRecursion": false,
+            "matchPersonaDescription": false,
+            "matchCharacterDescription": false,
+            "matchCharacterPersonality": false,
+            "matchCharacterDepthPrompt": false,
+            "matchScenario": false,
+            "matchCreatorNotes": false,
+            "delayUntilRecursion": false,
+            "probability": 100,
+            "useProbability": true,
+            "depth": 4,
+            "outletName": "",
+            "group": "",
+            "groupOverride": false,
+            "groupWeight": 100,
+            "scanDepth": null,
+            "caseSensitive": null,
+            "matchWholeWords": false,
+            "useGroupScoring": null,
+            "automationId": "",
+            "role": null,
+            "sticky": 0,
+            "cooldown": 0,
+            "delay": 0,
+            "triggers": [],
+            "displayIndex": 17,
+            "characterFilter": {
+                "isExclude": false,
+                "names": [],
+                "tags": []
+            }
         }
     }
 }
