@@ -111,6 +111,15 @@ export function recordVersion(rel, content, note) {
     }
     return { recorded: true, version, path: historyRel, fullPath: historyFull };
 }
+// DLG 演出/流程/条件指令关键字，与 addons/asset_manager/dialogue_editor/data/instruction_type.gd 对齐。
+// 规范文本中出现的合法指令行原样保留进 DLG；未知指令显式报错，绝不静默丢弃。
+const DLG_INSTRUCTION_KEYWORDS = new Set([
+    'speaker', 'emotion', 'portrait', 'portrait_hide', 'portrait_move',
+    'shake', 'flash', 'fade_in', 'fade_out', 'transition',
+    'wait', 'jump', 'end', 'bgm', 'bgm_stop', 'sfx',
+    'set', 'call', 'if', 'elif', 'else', 'endif',
+]);
+
 /**
  * 规范文本 -> DLG 文本。任何无法识别的行都会显式报错，绝不静默丢弃。
  * 规范文本格式：
@@ -121,7 +130,7 @@ export function recordVersion(rel, content, note) {
  *   `角色: 台词`           -> 对白行
  *   `-> 选项文本 => 目标`   -> 选项行
  *   `> 旁白行`             -> 保留（内容是否符合 DLG 写作规范（允许 > 旁白，旁白不得替玩家角色做决定）由文心复检把关）
- *   `@end`                 -> 结束标记
+ *   `@指令 ...`            -> 演出/流程/条件指令行（如 @wait、@shake、@set、@call、@if/@elif/@else/@endif、@end），原样保留
  */
 export function parseNormToDlg(content) {
     const lines = String(content).split(/\r?\n/);
@@ -151,7 +160,12 @@ export function parseNormToDlg(content) {
             out.push(line);
             continue;
         }
-        if (trimmed === '@end') {
+        if (trimmed.startsWith('@')) {
+            const keyword = trimmed.slice(1).trim().split(/\s+/)[0].toLowerCase();
+            if (!DLG_INSTRUCTION_KEYWORDS.has(keyword)) {
+                errors.push(`无法识别的指令：${trimmed}`);
+                continue;
+            }
             out.push(line);
             continue;
         }
