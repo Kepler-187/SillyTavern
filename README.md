@@ -1,74 +1,69 @@
-# Tiny World SillyTavern 工作环境
+# Tiny World 酒馆（SillyTavern）独立工作环境
 
 ## 1. 目录与 Git 边界
 
-Tiny World 将 SillyTavern 程序与项目数据分开管理：
+酒馆自 216c315b（2026-08，添加文心写作助手）起从 Tiny World 主仓库移出，改为**独立 git 仓库**同步，不再由 Tiny World 主仓库跟踪。
 
-- `tools/sillytavern/app/`：SillyTavern submodule，只保存程序版本。
-- `tools/sillytavern/data/`：由 Tiny World 主仓库跟踪的共享数据，也是 SillyTavern 的实际 `dataRoot`。
-- `tools/sillytavern/config.yaml`：由 Tiny World 主仓库跟踪的共享服务配置。
-- `tools/sillytavern/setup.ps1`：每台电脑首次使用或依赖需要重装时运行。
-- `tools/sillytavern/start.ps1`：需要启动酒馆服务时运行，不负责同步数据。
+- 独立仓库位置：`tools/sillytavern/`（本目录）
+- 远程仓库：`https://github.com/Kepler-187/SillyTavern.git`
+- 默认分支：`main`（保存共享资料、脚本与配置）
+- `app/`：SillyTavern 程序 submodule，指向同一个远程的 `release` 分支（固定版本 8172dcd0e）
+- `data/`：共享数据（角色卡、世界书、聊天、快捷回复、设置），也是酒馆的实际 `dataRoot`
+- `config.yaml`、`setup.ps1`、`start.ps1`、`README.md`：随 `main` 分支同步
 
-角色卡、世界书、聊天、快捷回复、预设、主题、背景和 `settings.json` 都直接保存在共享数据目录。酒馆对这些内容的修改会直接出现在 Tiny World 的 `git status` 中，不存在额外的数据同步步骤。
+角色卡、世界书、聊天、快捷回复、预设、主题、背景和 `settings.json` 都直接保存在 `data/`，酒馆对内容的修改会直接出现在本仓库的 `git status`，提交推送后即可同步到其他电脑。
 
-## 2. 首次使用
+> 重要：Tiny World 主仓库不再跟踪 `tools/sillytavern`（`.gitignore` 已排除）。不要在主仓库里提交酒馆内容；酒馆的 Git 操作全部在本目录完成。
 
-推荐克隆时直接初始化 submodule：
-
-```powershell
-git clone --recurse-submodules <tiny-world-url>
-cd tiny-world
-.\tools\sillytavern\setup.ps1
-```
-
-如果 Tiny World 已经克隆：
+## 2. 首次使用（新电脑）
 
 ```powershell
+git clone https://github.com/Kepler-187/SillyTavern.git
+cd SillyTavern
 git submodule update --init --recursive
-.\tools\sillytavern\setup.ps1
+pwsh .\setup.ps1
 ```
 
-环境要求：
-
-- Git
-- Node.js 20 或更高版本
+环境要求：Git、Node.js 20 或更高版本、PowerShell 7（pwsh）。
 
 `setup.ps1` 只初始化 submodule 并执行 `npm ci`，不会改写共享酒馆资料。
 
 ## 3. 启动
 
+必须用 **PowerShell 7（pwsh）** 运行脚本。Windows PowerShell 5.1 对无 BOM 的 UTF-8 中文会乱码。
+
 ```powershell
-.\tools\sillytavern\start.ps1
+pwsh .\start.ps1
 ```
 
 默认地址：`http://127.0.0.1:8000/`
 
 `start.ps1` 使用固定的共享配置和数据目录启动服务。它不执行 Git 操作，也不复制或同步世界书、聊天和角色卡。
 
-更新普通项目文本后无需运行 `start.ps1`。酒馆已经运行时，拉取到的角色卡或设置可能仍受页面缓存影响；刷新页面，必要时重启服务或新建聊天验证。
+酒馆已经运行时，拉取到的角色卡或设置可能仍受页面缓存影响；刷新页面，必要时重启服务或新建聊天验证。
 
 ## 4. 日常 Git 流程
 
-从其他电脑获取最新资料：
+从其他电脑获取最新资料（在酒馆独立仓库内）：
 
 ```powershell
 git pull
 ```
 
-只有 Tiny World 更新了 SillyTavern 程序指针时，才需要额外执行：
+更新酒馆程序版本（app submodule）：
 
 ```powershell
 git submodule update --init --recursive
-.\tools\sillytavern\setup.ps1
+pwsh .\setup.ps1
 ```
 
-在酒馆中修改世界书、角色卡或聊天后，直接检查并提交 Tiny World：
+在酒馆中修改世界书、角色卡或聊天后，提交并推送（在酒馆独立仓库内）：
 
 ```powershell
-git status --short -- tools/sillytavern/data
-git add tools/sillytavern/data
-git commit
+git status --short
+git add data
+git commit -m "说明这次修改"
+git push
 ```
 
 多台电脑不要同时修改同一本世界书或同一个聊天文件。修改前先 `git pull`，完成后及时提交和推送。
@@ -86,20 +81,21 @@ git commit
 - 文心聊天：`data/default-user/chats/文心/`
 - 用户设置与世界书绑定：`data/default-user/settings.json`
 
+注意：本机 TW-10 / TW-30 世界书内容与 git 版本可能不一致，以本地正在运行的版本为准，需要同步时人工确认后再提交。
+
 ST 运行态是写作工作台，不自动成为 Tiny World 游戏资产的事实来源。角色声音正式文档仍优先放在 `docs/voice_profiles/{角色名}.md`；ST 世界书是写作时使用的装载副本。
 
 ## 6. 本机私有数据
 
-每台电脑都必须单独配置 API。以下文件和运行产物被 Tiny World 的 `.gitignore` 排除：
+每台电脑都必须单独配置 API。以下文件和运行产物被本仓库的 `.gitignore` 排除，永不提交：
 
-- `secrets.json`
-- `cookie-secret.txt`
+- `data/cookie-secret.txt`
+- `data/default-user/secrets.json`
 - API Key、密码和 token
-- `backups/`
-- `thumbnails/`
-- `vectors/`
+- `backups/`、`thumbnails/`、`vectors/`
 - `_cache/`、`_storage/`、`_uploads/`、`_webpack/`
-- 日志、统计和图片元数据缓存
+- `app/node_modules/`（由 setup.ps1 重建）
+- 日志（`st_stdout.log`、`st_stderr.log`、`content.log`、`stats.json`）
 
 不要使用 `git add -f` 强制提交上述内容。首次启动后，在 SillyTavern 页面中配置本机 API。
 
@@ -128,3 +124,4 @@ ST 运行态是写作工作台，不自动成为 Tiny World 游戏资产的事�
 - 保存 ST 设置：`POST /api/settings/save`
 
 所有写接口都要使用同一会话取得的 CSRF token。角色卡是带 TavernCard 元数据的 PNG，应由 ST 接口读写，不直接重写 PNG 数据块。
+
