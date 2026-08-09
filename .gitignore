@@ -27,6 +27,7 @@ data/default-user/thumbnails/
 data/default-user/vectors/
 data/default-user/backups/
 data/default-user/assets/
-data/default-user/extensions/
+data/default-user/extensions/*
+!data/default-user/extensions/dlg-workbench/
 data/default-user/groups/
 data/default-user/group chats/

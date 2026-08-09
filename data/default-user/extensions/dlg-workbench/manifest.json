@@ -1,0 +1,14 @@
+{
+    "display_name": "DLG Workbench",
+    "loading_order": 100,
+    "requires": [],
+    "optional": [],
+    "js": "index.js",
+    "css": "style.css",
+    "author": "Tiny World",
+    "version": "1.0.0",
+    "homePage": "https://github.com/Kepler-187/SillyTavern",
+    "hooks": {
+        "activate": "init"
+    }
+}

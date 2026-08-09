@@ -1,0 +1,117 @@
+.dlgwb-bar {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    margin: 2px 0;
+    overflow-x: auto;
+    background: var(--SmartThemeBlurTintColor, rgba(0, 0, 0, 0.25));
+    border: 1px solid var(--SmartThemeBorderColor, #555);
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.dlgwb-label {
+    font-weight: 600;
+    margin-right: 4px;
+    color: var(--SmartThemeBodyColor, #ddd);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.dlgwb-bar .menu_button {
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 3px 8px;
+    line-height: 1.4;
+}
+
+.dlgwb-status {
+    margin-left: auto;
+    min-width: 0;
+    max-width: 45%;
+    font-size: 12px;
+    color: var(--SmartThemeBodyColor, #aaa);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+}
+
+.dlgwb-status.error {
+    color: #ff6b6b;
+    white-space: pre-wrap;
+    overflow: visible;
+    text-overflow: clip;
+}
+
+.dlgwb-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 30000;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dlgwb-modal {
+    width: min(640px, 92vw);
+    max-height: 78vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--SmartThemeBlurTintColor, #222);
+    border: 1px solid var(--SmartThemeBorderColor, #555);
+    border-radius: 10px;
+    padding: 14px;
+    gap: 10px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+}
+
+.dlgwb-modal-header {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.dlgwb-filelist {
+    flex: 1;
+    overflow-y: auto;
+    border: 1px solid var(--SmartThemeBorderColor, #444);
+    border-radius: 6px;
+    padding: 6px;
+    min-height: 200px;
+}
+
+.dlgwb-group {
+    font-size: 12px;
+    color: var(--SmartThemeBodyColor, #888);
+    margin: 8px 2px 4px;
+    border-bottom: 1px dashed var(--SmartThemeBorderColor, #444);
+}
+
+.dlgwb-item {
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.dlgwb-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.dlgwb-item.picked {
+    background: rgba(46, 125, 102, 0.45);
+}
+
+.dlgwb-empty {
+    padding: 12px;
+    color: var(--SmartThemeBodyColor, #888);
+    text-align: center;
+}
+
+.dlgwb-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}

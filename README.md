@@ -125,3 +125,31 @@ ST 运行态是写作工作台，不自动成为 Tiny World 游戏资产的事�
 
 所有写接口都要使用同一会话取得的 CSRF token。角色卡是带 TavernCard 元数据的 PNG，应由 ST 接口读写，不直接重写 PNG 数据块。
 
+
+## 8. DLG 工作台（dlg-workbench）
+
+在酒馆里直接打开 Tiny World 主仓库的 DLG 文件，由文心阅读、对话式改写，写为规范文本，并在复检后写入同名 DLG。
+
+组成（均在本目录内）：
+
+- 前端扩展：`data/default-user/extensions/dlg-workbench/`（酒馆输入框上方的「DLG 工作台」工具条）
+- 服务端插件：`app/plugins/dlg-workbench/index.mjs`（提供 `/api/plugins/dlg-workbench/*` 文件读写接口）
+- 配置：`config.yaml` 已启用 `enableServerPlugins: true`
+- 规范文本目录：`data/default-user/规范文本/`（与 DLG 同名、镜像子目录，首次保存时自动创建）
+- 版本历史目录：`data/default-user/dlg-history/`（读取/写入时自动记录 DLG 内容版本，按内容去重，不重复追加）
+
+使用流程（刷新酒馆页面后可见工具条）：
+
+1. 「读取 DLG」：弹窗列出 `data/dialogues` 下全部 DLG（可输入关键字搜索，也可直接输入相对路径），选中后内容作为消息注入聊天（读取时自动把当前内容记为 V1 初版；若与历史最新版相同则不重复记录）。
+2. 「改写」：文心阅读该 DLG 并与你讨论改写目标（玩家角色、触发前状态、演出模式、创作问题），确认后再落稿。
+3. 「写为规范文本」：文心把确定稿整理为规范文本（`=== 节点 ===`、`角色: 台词`、`-> 选项 => 目标`、`@end`），用 ` ```norm ` 代码块输出。
+4. 「保存规范文本」：从文心回复提取 ` ```norm ` 块，保存到规范文本目录，文件名与 DLG 一致。
+5. 「写入 DLG」：先由程序解析校验规范文本结构（失败显式报错、不进入下一步），再请文心按 DLG 写入规范复检（演出呈现、玩家代理权、选项跳转、`@end` 可达、固定主角声音）。
+6. 「确认写入」：文心复检通过后手动确认，程序再次解析校验并写入同名 DLG，回读验证后报告结果（写入成功即追加新版本快照 V2、V3…，带时间戳，保存于 dlg-history/）。
+
+注意：
+
+- `app/` 是 submodule：更新 app 前先备份或重新放置 `app/plugins/dlg-workbench/`，`setup.ps1` 会重置 submodule。
+- `data/default-user/extensions/` 被 `.gitignore` 忽略：换电脑时需重新复制 `dlg-workbench` 扩展目录（或从备份恢复）。
+- 写入只改 `.dlg` 文件，不触碰 `.dlg.import`（Godot 会自动重新导入）。
+- 写入 DLG 覆盖前必须先经过文心复检与手动确认，任何解析错误都会中止写入，不做静默兜底。
