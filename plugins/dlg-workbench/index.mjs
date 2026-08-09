@@ -120,7 +120,7 @@ export function recordVersion(rel, content, note) {
  *   单独一行 `===`          -> 文件尾部收束标记，原样保留
  *   `角色: 台词`           -> 对白行
  *   `-> 选项文本 => 目标`   -> 选项行
- *   `> 旁白行`             -> 保留（内容是否符合纯对白规范由文心复检把关）
+ *   `> 旁白行`             -> 保留（内容是否符合 DLG 写作规范（允许 > 旁白，旁白不得替玩家角色做决定）由文心复检把关）
  *   `@end`                 -> 结束标记
  */
 export function parseNormToDlg(content) {
