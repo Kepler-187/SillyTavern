@@ -3,10 +3,10 @@
     "accountStorage": {
         "__migrated": "1",
         "StoryStringValidationCache": "{\"hashCache\":{\"3090278210222208\":{\"fieldsWarned\":{}}}}",
-        "NavOpened": "false",
+        "NavOpened": "true",
         "SelectedNavTab": "rm_button_characters",
         "WINavOpened": "true",
-        "LNavOpened": "true",
+        "LNavOpened": "false",
         "AlertWI_default_Seraphina.png": "true",
         "LNavLockOn": "false"
     },
@@ -1087,7 +1087,7 @@
         "nanogpt_model": "gpt-4o-mini",
         "nanogpt_provider": "",
         "nanogpt_payg_override": false,
-        "deepseek_model": "deepseek-v4-pro",
+        "deepseek_model": "deepseek-v4-flash",
         "aimlapi_model": "chatgpt-4o-latest",
         "xai_model": "grok-3-beta",
         "pollinations_model": "openai",
