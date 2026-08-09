@@ -9,7 +9,22 @@ const state = {
 
 // ---------- 指令模板 ----------
 
-const REWRITE_PROMPT = `请阅读我刚刚给出的 DLG 文件，然后开始和我讨论改写目标，先不要落稿。请依次与我确认：1) 本段玩家操控哪个角色；2) 对话触发前，玩家已经通过移动、交互或选项完成了什么；3) 演出模式（默认“传统交谈”）；4) 本次改写想解决的具体创作问题（节奏、角色声音、冲突强度、信息密度等）。我确认目标后，再进入写稿。`;
+const REWRITE_PROMPT = `请改写我刚刚给出的 DLG 文件。只写玩家可见文本，保留节点、跳转、事件和 @call/@set 等系统调用不变。
+
+默认处理（没有特别要求就按此执行）：
+- 演出模式：传统交谈；玩家操控角色默认按本 DLG 的说话人判断；
+- 台词口语化：像符合角色身份的日常话语，用碎句、语气词、省略号、重复和结巴承载情绪；不写“念状况”式报幕、记账式书面句，不对物体或动物下冷静指令；
+- 环境与台词结合：环境描写只负责搭台与转折，不一句环境一句对白工整交替；日常段落允许连续对白，环境信息尽量由台词承担；紧张段落对白变短、环境变碎；
+- 演出描述行以 > 开头，不用“她/他”指代中心角色或玩家操控角色；角色名只用于开场定位、消除歧义与关键定格，连续动作省略主语；
+- 不照搬我提供的示例原句，示例只作风格校准，须换说法重写。
+
+请在下方补充本次改写信息，补完直接发送（留空则按默认处理，不逐项追问）：
+【触发前背景/已发生行为】例如：小芽在斜阳村外采完车前草，正要收拾药篓回村
+【玩家操控角色】如不是本 DLG 主要说话人，请注明
+【本次想解决的创作问题】例如：扩写成有画面感的场景对话，不要太短
+【不可改/不可新增】
+
+只有缺失会改变核心因果、角色声音或输出结构时，才列出已知与缺失并提最多三个成组问题；可自行判断的空白直接按默认处理。`;
 
 function toNormPrompt(targetRel) {
     return `请把我们刚才讨论确定下来的改写内容整理为规范文本。规范文本是与 DLG 同名的写作稿，格式如下：
@@ -17,7 +32,7 @@ function toNormPrompt(targetRel) {
 - 每个对话节点用 === 节点名 === 标记（开头节点必须是 === start ===）；
 - 对白行写“角色: 台词”；
 - 玩家选项行写“-> 选项文本 => 跳转节点名”；
-- 节点结束写 @end，文件末尾写单独一行 ===；
+- 演出/流程/条件指令行原样保留（如 @wait、@shake、@set 变量 值、@call 函数 参数、@if/@elif/@else/@endif、@end），文件末尾写单独一行 ===；
 输出时用 \`\`\`norm 代码块完整包裹规范文本，代码块外只保留一句话说明，不要输出其它内容。
 这份规范文本对应 DLG：${targetRel}。你没有保存文件的能力，不要声称“已保存”；请在回复末尾提醒我点击「保存规范文本」按钮来完成保存。`;
 }
@@ -182,7 +197,7 @@ async function readDlg() {
         }
         state.dlgRel = rel;
         await sendMessageAsUser(`【DLG 文件】${data.name}\n\`\`\`dlg\n${data.content}\n\`\`\``);
-        setStatus(`已读取：${rel}。可点「改写」让文心阅读并讨论改写目标${histText(data.history)}`);
+        setStatus(`已读取：${rel}。可点「改写」把改写提示填入输入框${histText(data.history)}`);
     });
 }
 
@@ -191,9 +206,14 @@ async function rewriteDlg() {
         setStatus('请先点「读取 DLG」选择文件', true);
         return;
     }
-    setStatus(`已向文心发起改写讨论：${state.dlgRel}`);
-    await sendMessageAsUser(REWRITE_PROMPT);
-    await Generate('normal');
+    const ta = document.querySelector('#send_textarea');
+    if (!ta) {
+        setStatus('未找到输入框', true);
+        return;
+    }
+    ta.value = REWRITE_PROMPT;
+    ta.dispatchEvent(new Event('input', { bubbles: true }));
+    setStatus(`改写提示已填入输入框：${state.dlgRel}。补充背景等信息后发送`);
 }
 
 async function toNorm() {
