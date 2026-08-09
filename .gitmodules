@@ -1,0 +1,4 @@
+[submodule "app"]
+	path = app
+	url = https://github.com/Kepler-187/SillyTavern.git
+	branch = release

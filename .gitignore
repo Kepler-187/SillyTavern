@@ -1,0 +1,32 @@
+# 运行日志
+st_stdout.log
+st_stderr.log
+
+# 依赖(由 setup.ps1 的 npm ci 重建)
+app/node_modules/
+
+# 旧 submodule 指针(已移除,app 作为普通目录跟踪)
+app/.git
+
+# ST 程序默认数据目录(未使用,实际数据在 data/)
+app/data/
+
+# 本机运行态与私有凭据(不进入同步)
+data/cookie-secret.txt
+data/content.log
+data/_cache/
+data/_errors/
+data/_storage/
+data/_uploads/
+data/_webpack/
+data/default-user/secrets.json
+data/default-user/content.log
+data/default-user/stats.json
+data/default-user/image-metadata.json
+data/default-user/thumbnails/
+data/default-user/vectors/
+data/default-user/backups/
+data/default-user/assets/
+data/default-user/extensions/
+data/default-user/groups/
+data/default-user/group chats/
